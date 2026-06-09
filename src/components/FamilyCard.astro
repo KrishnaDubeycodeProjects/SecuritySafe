@@ -1,0 +1,178 @@
+---
+import type { FamilyMember } from '../utils/types';
+
+export interface Props {
+  member: FamilyMember;
+}
+
+const { member } = Astro.props;
+---
+
+<div class="family-card" data-relation={member.relation}>
+  <div class="family-avatar" data-online={member.isOnline}>
+    <span>{member.name.charAt(0)}</span>
+    {member.isOnline && <div class="online-dot"></div>}
+  </div>
+  <div class="family-info">
+    <h3 class="family-name">
+      {member.name}
+      {member.relation !== 'self' && (
+        <span class="family-relation">{member.relation}</span>
+      )}
+    </h3>
+    <div class="family-meta">
+      {member.isSenior && <span class="family-badge senior">Senior</span>}
+      {member.isChild && <span class="family-badge child">Child</span>}
+      {member.age && <span class="family-age">{member.age} yrs</span>}
+    </div>
+  </div>
+  <div class="family-stats">
+    <div class="stat-item">
+      <span class="stat-value" style="color: {member.threatCount > 3 ? 'var(--red)' : 'var(--green)'}">
+        {member.threatCount}
+      </span>
+      <span class="stat-label">Threats</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-value" style="color: {member.safeScore >= 6 ? 'var(--green)' : member.safeScore >= 4 ? 'var(--amber)' : 'var(--red)'}">
+        {member.safeScore}
+      </span>
+      <span class="stat-label">Score</span>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .family-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 10px;
+    transition: all 0.2s ease;
+  }
+
+  .family-card:hover {
+    border-color: rgba(0, 255, 136, 0.3);
+  }
+
+  .family-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: rgba(0, 255, 136, 0.08);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--green);
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .family-avatar[data-online="true"] {
+    border-color: var(--green);
+  }
+
+  .online-dot {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 12px;
+    height: 12px;
+    background: var(--green);
+    border: 2px solid var(--bg-card);
+    border-radius: 50%;
+  }
+
+  .family-info {
+    flex: 1;
+  }
+
+  .family-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .family-relation {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-dim);
+    text-transform: capitalize;
+  }
+
+  .family-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .family-badge {
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .family-badge.senior {
+    background: rgba(255, 184, 0, 0.1);
+    color: var(--amber);
+    border: 1px solid rgba(255, 184, 0, 0.2);
+  }
+
+  .family-badge.child {
+    background: rgba(124, 111, 255, 0.1);
+    color: var(--purple);
+    border: 1px solid rgba(124, 111, 255, 0.2);
+  }
+
+  .family-age {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .family-stats {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 40px;
+  }
+
+  .stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    font-family: var(--font-heading);
+  }
+
+  .stat-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .stat-divider {
+    width: 1px;
+    height: 30px;
+    background: var(--border);
+  }
+</style>

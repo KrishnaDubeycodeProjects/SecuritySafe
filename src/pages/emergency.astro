@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import EmergencySteps from '../components/EmergencySteps.astro';
+---
+
+<Layout title="SAFE - Emergency" currentPage="emergency" description="Immediate steps to take if you have been a victim of cyber fraud.">
+  <main class="emergency-page">
+    <div class="container">
+      <EmergencySteps />
+    </div>
+  </main>
+</Layout>
+
+<style is:global>
+  .emergency-page {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 16px;
+  }
+
+  @media (min-width: 768px) {
+    .emergency-page {
+      padding: 40px 24px;
+    }
+  }
+</style>

@@ -1,0 +1,262 @@
+---
+export interface Props {
+  currentPage?: string;
+}
+
+const { currentPage = 'home' } = Astro.props;
+
+const navItems = [
+  { id: 'scan', label: 'Scan', path: '/' },
+  { id: 'learn', label: 'Learn', path: '/learn' },
+  { id: 'emergency', label: 'Emergency', path: '/emergency' },
+  { id: 'report', label: 'Report', path: '/report' },
+  { id: 'more', label: 'More', path: '/more' },
+];
+---
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <path d="M9 12l2 2 4-4" stroke-width="2"/>
+      </svg>
+      <span class="nav-logo-text">SAFE</span>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      {
+        navItems.map((item) => (
+          <a
+            href={item.path}
+            class:list={{ 'nav-link': true, active: currentPage === item.id }}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <div class="toggle-track">
+          <div class="toggle-thumb">
+            <svg class="sun-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <svg class="moon-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--on-ink)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </div>
+        </div>
+      </button>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<script>
+  (function() {
+    var theme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+
+    document.getElementById('themeToggle').addEventListener('click', function() {
+      var current = document.documentElement.getAttribute('data-theme');
+      var next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.content = next === 'dark' ? '#0a0a0a' : '#fafafa';
+    });
+
+    document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+  })();
+</script>
+
+<style is:global>
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--nav-height);
+    background: var(--canvas);
+    border-bottom: 1px solid var(--hairline);
+    z-index: 100;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+
+  .nav-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--space-lg);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .nav-logo-text {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.03em;
+  }
+
+  .nav-links {
+    display: none;
+    gap: 2px;
+    align-items: center;
+  }
+
+  .nav-link {
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--body);
+    text-decoration: none;
+    transition: var(--transition);
+    letter-spacing: -0.01em;
+  }
+
+  .nav-link:hover {
+    color: var(--ink);
+    background: var(--canvas-soft-2);
+  }
+
+  .nav-link.active {
+    color: var(--ink);
+    background: var(--canvas-soft-2);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+  }
+
+  .theme-toggle:hover {
+    background: var(--canvas-soft-2);
+  }
+
+  .toggle-track {
+    width: 40px;
+    height: 22px;
+    background: var(--canvas-soft-2);
+    border: 1px solid var(--hairline);
+    border-radius: 11px;
+    position: relative;
+    transition: var(--transition);
+  }
+
+  .toggle-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: var(--canvas);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55), background 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  [data-theme="dark"] .toggle-thumb {
+    transform: translateX(18px);
+    background: var(--ink);
+  }
+
+  .toggle-thumb svg {
+    position: absolute;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .sun-icon { opacity: 1; transform: rotate(0deg); }
+  .moon-icon { opacity: 0; transform: rotate(-90deg); }
+
+  [data-theme="dark"] .sun-icon { opacity: 0; transform: rotate(90deg); }
+  [data-theme="dark"] .moon-icon { opacity: 1; transform: rotate(0deg); }
+
+  .mobile-menu-btn {
+    display: flex;
+    background: none;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-sm);
+    padding: 8px;
+    cursor: pointer;
+    color: var(--ink);
+    transition: var(--transition);
+  }
+
+  .mobile-menu-btn:hover {
+    background: var(--canvas-soft-2);
+  }
+
+  @media (min-width: 768px) {
+    .nav-links {
+      display: flex;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+    }
+
+    .nav-inner {
+      padding: 0 var(--space-xl);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .nav-links.open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: var(--nav-height);
+      left: 0;
+      right: 0;
+      background: var(--canvas);
+      border-bottom: 1px solid var(--hairline);
+      padding: 8px 16px;
+      gap: 4px;
+      box-shadow: var(--shadow-level-3);
+    }
+
+    .nav-links.open .nav-link {
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+    }
+  }
+</style>

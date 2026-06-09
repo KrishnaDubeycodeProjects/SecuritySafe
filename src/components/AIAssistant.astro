@@ -1,0 +1,354 @@
+---
+import { allQuestions } from '../utils/aiAssistant';
+---
+
+<section class="ai-assistant">
+  <div class="container">
+    <div class="ai-header">
+      <div class="ai-avatar">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <circle cx="12" cy="12" r="3" fill="var(--green)" fill-opacity="0.2"/>
+        </svg>
+      </div>
+      <div>
+        <h2 class="ai-title">SAFE AI Assistant</h2>
+        <p class="ai-subtitle">Ask me anything about cyber safety</p>
+      </div>
+    </div>
+
+    <div id="chat-container" class="chat-container">
+      <div id="chat-messages" class="chat-messages">
+        <div class="message ai-message">
+          <div class="message-avatar">AI</div>
+          <div class="message-content">
+            <p>Hi! I am your personal cyber safety assistant. Ask me anything like:</p>
+            <ul class="suggested-questions">
+              {allQuestions.slice(0, 4).map((q) => (
+                <li>
+                  <button class="suggested-q" onclick={`askQuestion('${q.replace(/'/g, "\\'")}')`}>
+                    "{q}"
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-area">
+        <input
+          type="text"
+          id="chat-input"
+          class="chat-input"
+          placeholder="Type your question..."
+          onkeydown="if(event.key==='Enter') sendMessage()"
+        />
+        <button class="chat-send-btn" onclick="sendMessage()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { findAnswer } from '../utils/aiAssistant';
+
+  window.sendMessage = function() {
+    const input = document.getElementById('chat-input');
+    const messages = document.getElementById('chat-messages');
+    const text = input.value.trim();
+    if (!text) return;
+
+    messages.insertAdjacentHTML('beforeend', `
+      <div class="message user-message">
+        <div class="message-content user-content">
+          <p>${escapeHtml(text)}</p>
+        </div>
+        <div class="message-avatar user-avatar">You</div>
+      </div>
+    `);
+
+    input.value = '';
+
+    const result = findAnswer(text);
+
+    setTimeout(() => {
+      if (result) {
+        messages.insertAdjacentHTML('beforeend', `
+          <div class="message ai-message">
+            <div class="message-avatar">AI</div>
+            <div class="message-content">
+              <p>${escapeHtml(result.answer)}</p>
+              ${result.relatedScams ? `
+                <div class="related-scams">
+                  <span class="related-label">Related Threats:</span>
+                  ${result.relatedScams.map(s => `<span class="related-tag">${escapeHtml(s)}</span>`).join('')}
+                </div>
+              ` : ''}
+              ${result.emergencyRelevant ? `
+                <div class="emergency-note">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  <span>If you are a victim, visit Emergency Center.</span>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `);
+      } else {
+        messages.insertAdjacentHTML('beforeend', `
+          <div class="message ai-message">
+            <div class="message-avatar">AI</div>
+            <div class="message-content">
+              <p>I am not sure about that specific question. Try asking about:</p>
+              <ul class="suggested-questions">
+                <li><button class="suggested-q" onclick="askQuestion('Can I trust this website?')">"Can I trust this website?"</button></li>
+                <li><button class="suggested-q" onclick="askQuestion('Is this message fake?')">"Is this message fake?"</button></li>
+                <li><button class="suggested-q" onclick="askQuestion('How do I report fraud?')">"How do I report fraud?"</button></li>
+              </ul>
+            </div>
+          </div>
+        `);
+      }
+      messages.scrollTop = messages.scrollHeight;
+    }, 500);
+  };
+
+  window.askQuestion = function(question) {
+    document.getElementById('chat-input').value = question;
+    sendMessage();
+  };
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+</script>
+
+<style is:global>
+  .ai-assistant {
+    padding: 24px 0;
+  }
+
+  .ai-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .ai-avatar {
+    width: 52px;
+    height: 52px;
+    background: rgba(0, 255, 136, 0.08);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .ai-title {
+    font-size: 20px;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .ai-subtitle {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .chat-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 320px);
+    min-height: 400px;
+  }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 4px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scroll-behavior: smooth;
+  }
+
+  .message {
+    display: flex;
+    gap: 10px;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .message-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .ai-message .message-avatar {
+    background: rgba(0, 255, 136, 0.1);
+    color: var(--green);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+  }
+
+  .user-message .message-avatar {
+    background: rgba(124, 111, 255, 0.1);
+    color: var(--purple);
+    border: 1px solid rgba(124, 111, 255, 0.2);
+  }
+
+  .user-message {
+    flex-direction: row-reverse;
+  }
+
+  .message-content {
+    flex: 1;
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .ai-message .message-content {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .user-message .message-content {
+    background: rgba(124, 111, 255, 0.06);
+    border: 1px solid rgba(124, 111, 255, 0.15);
+    color: var(--text);
+  }
+
+  .message-content p {
+    margin-bottom: 8px;
+  }
+
+  .message-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .suggested-questions {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .suggested-q {
+    background: none;
+    border: none;
+    color: var(--green);
+    font-size: 13px;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: rgba(0, 255, 136, 0.05);
+    border: 1px solid rgba(0, 255, 136, 0.1);
+    width: 100%;
+    text-align: left;
+    transition: all 0.2s ease;
+    font-family: var(--font-body);
+  }
+
+  .suggested-q:hover {
+    background: rgba(0, 255, 136, 0.1);
+  }
+
+  .related-scams {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .related-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+
+  .related-tag {
+    font-size: 10px;
+    padding: 3px 8px;
+    background: rgba(255, 23, 68, 0.08);
+    border: 1px solid rgba(255, 23, 68, 0.15);
+    border-radius: 5px;
+    color: var(--red);
+  }
+
+  .emergency-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: rgba(255, 23, 68, 0.06);
+    border: 1px solid rgba(255, 23, 68, 0.12);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--red);
+  }
+
+  .chat-input-area {
+    display: flex;
+    gap: 8px;
+    padding: 12px 0 0;
+    border-top: 1px solid var(--border);
+    margin-top: 12px;
+  }
+
+  .chat-input {
+    flex: 1;
+    padding: 14px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+  }
+
+  .chat-input:focus {
+    border-color: var(--green);
+  }
+
+  .chat-send-btn {
+    width: 48px;
+    height: 48px;
+    background: var(--green);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #05050f;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .chat-send-btn:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+  }
+</style>

@@ -1,0 +1,238 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FamilyCard from '../components/FamilyCard.astro';
+import { familyMembers, getFamilyRiskSummary } from '../utils/familyData';
+---
+
+<Layout title="SAFE - Family Shield" currentPage="more" description="Protect your entire family from cyber threats.">
+  <main class="family-page">
+    <div class="container">
+      <div class="page-header">
+        <h1>Family Shield</h1>
+        <p>Protect your loved ones from cyber threats.</p>
+      </div>
+
+      <div class="family-summary">
+        <div class="summary-card">
+          <div class="summary-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div>
+            <span class="summary-val">{getFamilyRiskSummary().seniorCount}</span>
+            <span class="summary-lbl">Senior Members</span>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div>
+            <span class="summary-val">{getFamilyRiskSummary().childCount}</span>
+            <span class="summary-lbl">Children</span>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div>
+            <span class="summary-val">{getFamilyRiskSummary().totalThreats}</span>
+            <span class="summary-lbl">Total Threats</span>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <div>
+            <span class="summary-val">{getFamilyRiskSummary().averageScore}</span>
+            <span class="summary-lbl">Avg. Score</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="family-list">
+        <h2 class="section-title">Family Members</h2>
+        {familyMembers.map((member) => (
+          <FamilyCard member={member} />
+        ))}
+      </div>
+
+      <div class="family-actions">
+        <button class="add-member-btn" onclick="alert('Family member invitation feature coming soon!')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Add Family Member
+        </button>
+      </div>
+
+      <div class="family-info">
+        <h3>Why Family Shield?</h3>
+        <p>Senior citizens and children are most vulnerable to cyber scams. Family Shield lets you monitor threats across your family and get instant alerts when a family member encounters a scam.</p>
+        <ul class="family-benefits">
+          <li>Real-time threat notifications for family members</li>
+          <li>Senior citizen friendly scam alerts</li>
+          <li>Child online activity safety monitoring</li>
+          <li>Shared family security dashboard</li>
+          <li>Emergency alerts to all members</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style is:global>
+  .family-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--space-lg) 0;
+  }
+
+  .page-header {
+    text-align: center;
+    padding: 0 var(--space-md) var(--space-lg);
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+    color: var(--ink);
+    margin-bottom: var(--space-xs);
+  }
+
+  .page-header p {
+    font-size: 14px;
+    color: var(--body);
+  }
+
+  .family-summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+    padding: 0 var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .summary-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    background: var(--canvas);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-xl);
+  }
+
+  .summary-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--hairline);
+    flex-shrink: 0;
+  }
+
+  .summary-val {
+    display: block;
+    font-size: 24px;
+    font-weight: 800;
+    font-family: var(--font-display);
+    color: var(--ink);
+  }
+
+  .summary-lbl {
+    font-size: 11px;
+    color: var(--body);
+  }
+
+  .family-list {
+    padding: 0 var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--body);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-md);
+  }
+
+  .family-actions {
+    padding: 0 var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .add-member-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    width: 100%;
+    padding: var(--space-sm);
+    background: transparent;
+    border: 1px dashed var(--hairline);
+    border-radius: var(--radius-lg);
+    color: var(--body);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .add-member-btn:hover {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .family-info {
+    padding: 0 var(--space-md) var(--space-lg);
+  }
+
+  .family-info h3 {
+    font-size: 16px;
+    color: var(--ink);
+    margin-bottom: var(--space-xs);
+  }
+
+  .family-info p {
+    font-size: 13px;
+    color: var(--body);
+    line-height: 1.6;
+    margin-bottom: var(--space-md);
+  }
+
+  .family-benefits {
+    list-style: none;
+    padding: 0;
+  }
+
+  .family-benefits li {
+    position: relative;
+    padding: 8px 0 8px 20px;
+    font-size: 13px;
+    color: var(--body);
+    line-height: 1.5;
+  }
+
+  .family-benefits li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+  }
+</style>
