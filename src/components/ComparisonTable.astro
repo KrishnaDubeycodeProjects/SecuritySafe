@@ -1,0 +1,114 @@
+<section class="comparison">
+  <div class="container">
+    <h2 class="section-title">Compare all <span class="gradient-text">features</span></h2>
+    <p class="section-subtitle">Find the perfect level of protection for your digital life.</p>
+
+    <div class="table-wrapper">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Features</th>
+            <th>Free</th>
+            <th class="th-featured">Pro</th>
+            <th>Team</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="section-row"><td colspan="4">ANALYSIS FEATURES</td></tr>
+          <tr><td>Daily Scans</td><td>5 scans</td><td class="td-featured">Unlimited</td><td>Unlimited</td></tr>
+          <tr><td>Deep AI Image Analysis</td><td class="td-no">✕</td><td class="td-featured td-yes">✓</td><td class="td-yes">✓</td></tr>
+          <tr><td>Website URL Verification</td><td class="td-yes">✓</td><td class="td-featured td-yes">✓</td><td class="td-yes">✓</td></tr>
+          <tr><td>SMS/Text Analysis</td><td class="td-no">✕</td><td class="td-featured td-yes">✓</td><td class="td-yes">✓</td></tr>
+          <tr><td>Blockchain Metadata Check</td><td class="td-no">✕</td><td class="td-featured">Advanced</td><td>Enterprise</td></tr>
+
+          <tr class="section-row"><td colspan="4">SECURITY & REPORTING</td></tr>
+          <tr><td>Real-time Alerts</td><td class="td-yes">✓</td><td class="td-featured td-yes">✓</td><td class="td-yes">✓</td></tr>
+          <tr><td>PDF Security Reports</td><td class="td-no">✕</td><td class="td-featured td-yes">✓</td><td class="td-yes">✓</td></tr>
+          <tr><td>Scam Database Access</td><td>Limited</td><td class="td-featured">Full</td><td>Full</td></tr>
+          <tr><td>Risk Assessment Score</td><td class="td-yes">✓</td><td class="td-featured td-yes">✓</td><td class="td-yes">✓</td></tr>
+
+          <tr class="section-row"><td colspan="4">TEAM & SUPPORT</td></tr>
+          <tr><td>Users Included</td><td>1 User</td><td class="td-featured">1 User</td><td>Up to 25</td></tr>
+          <tr><td>Admin Dashboard</td><td class="td-no">✕</td><td class="td-featured td-no">✕</td><td class="td-yes">✓</td></tr>
+          <tr><td>API Access</td><td>Limited</td><td class="td-featured">Full</td><td>Full</td></tr>
+          <tr><td>Priority Support</td><td>Standard</td><td class="td-featured">24/7 Priority</td><td>Dedicated Manager</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<style>
+  .comparison {
+    padding: 60px 0 100px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 16px 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .comparison-table th:first-child,
+  .comparison-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+  }
+
+  .comparison-table th {
+    background: var(--bg-card);
+    font-weight: 700;
+    font-size: 1rem;
+    position: sticky;
+    top: 0;
+  }
+
+  .th-featured {
+    color: var(--primary);
+    background: rgba(0, 230, 118, 0.05);
+  }
+
+  .td-featured {
+    background: rgba(0, 230, 118, 0.03);
+  }
+
+  .td-yes {
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  .td-no {
+    color: var(--text-muted);
+  }
+
+  .section-row td {
+    background: var(--bg-card);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .comparison-table tbody tr:hover td {
+    background: var(--bg-card-hover);
+  }
+
+  .comparison-table tbody tr:hover .td-featured {
+    background: rgba(0, 230, 118, 0.06);
+  }
+</style>

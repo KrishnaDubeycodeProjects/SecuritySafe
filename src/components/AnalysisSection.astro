@@ -1,0 +1,70 @@
+<section class="analysis section" id="features">
+  <div class="container">
+    <h2 class="section-title">The Scam Check <span class="gradient-text">Process</span></h2>
+    <p class="section-subtitle">Every check kicks off a detailed investigation across hundreds of sources, tools, and signals.</p>
+
+    <div class="mac-window analysis-window">
+      <div class="mac-titlebar">
+        <div class="mac-dots">
+          <span class="mac-dot red"></span>
+          <span class="mac-dot yellow"></span>
+          <span class="mac-dot green"></span>
+        </div>
+        <span class="mac-title">Analyzing...</span>
+      </div>
+      <div class="window-body">
+        <div class="process-step active">
+          <div class="step-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E676" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <div class="step-info">
+            <h4>Uploading information</h4>
+            <p>Receiving the information you've sent securely.</p>
+          </div>
+          <span class="step-status done">✓</span>
+        </div>
+
+        <div class="process-step active">
+          <div class="step-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E676" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+          <div class="step-info">
+            <h4>Checking for risks</h4>
+            <p>Visiting links, checking numbers, and analysing wording.</p>
+          </div>
+          <span class="step-status loading animate-pulse">⟳</span>
+        </div>
+
+        <div class="process-step">
+          <div class="step-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div class="step-info">
+            <h4>Looking for red flags</h4>
+            <p>Analysing information for markers of impersonation and criminal behaviour.</p>
+          </div>
+          <span class="step-status pending">○</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .analysis-window { max-width: 700px; margin: 0 auto; }
+  .window-body { padding: 32px; display: flex; flex-direction: column; gap: 24px; }
+  
+  .process-step {
+    display: flex; align-items: center; gap: 16px; padding: 16px;
+    background: var(--bg-input); border-radius: 12px; border: 1px solid var(--border-color);
+    transition: all 0.3s;
+  }
+  .process-step.active { border-color: rgba(0, 230, 118, 0.3); background: rgba(0, 230, 118, 0.02); }
+  
+  .step-icon {
+    width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+    background: var(--bg-card); border-radius: 10px; flex-shrink: 0;
+  }
+  .step-info { flex: 1; }
+  .step-info h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 2px; }
+  .step-info p { font-size: 0.8rem; color: var(--text-secondary); }
+  
+  .step-status { font-size: 1.2rem; font-weight: 700; width: 24px; text-align: center; }
+  .step-status.done { color: var(--primary); }
+  .step-status.loading { color: var(--primary); }
+  .step-status.pending { color: var(--text-muted); }
+</style>

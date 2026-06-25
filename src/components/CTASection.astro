@@ -1,0 +1,78 @@
+<section class="cta">
+  <div class="container">
+    <div class="cta-inner">
+      <div class="cta-glow"></div>
+      <h2 class="cta-title">Ready to secure your <span class="gradient-text">digital world?</span></h2>
+      <p class="cta-desc">
+        Join over 50,000 users who trust VerifyAI to protect their information from modern digital fraud.
+      </p>
+      <div class="cta-actions">
+        <a href="/SecuritySafe/signup" class="btn-primary">Start Free Trial</a>
+        <a href="/SecuritySafe/pricing" class="btn-secondary">View Pricing</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    padding: 100px 0;
+  }
+
+  .cta-inner {
+    position: relative;
+    padding: 80px 40px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .cta-glow {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 500px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(0, 230, 118, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-title {
+    font-size: 2.75rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    position: relative;
+    letter-spacing: -0.02em;
+  }
+
+  .cta-desc {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 500px;
+    margin: 0 auto 36px;
+    position: relative;
+  }
+
+  .cta-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    position: relative;
+  }
+
+  @media (max-width: 768px) {
+    .cta-title {
+      font-size: 1.75rem;
+    }
+    .cta-inner {
+      padding: 60px 24px;
+    }
+    .cta-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>

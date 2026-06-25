@@ -1,0 +1,40 @@
+verifyai-clone/
+── astro.config.mjs
+├── package.json
+├── tsconfig.json
+├── README.md
+├── public/
+│   └── images/
+│       ├── hero.png
+│       └── logo.png
+├── src/
+│   ├── layouts/
+│   │   └── Layout.astro
+│   ├── components/
+│   │   ├── common/
+│   │   │   ├── Navbar.astro
+│   │   │   └── Footer.astro
+│   │   ├── home/
+│   │   │   ├── HeroSection.astro
+│   │   │   ├── AnalysisSection.astro
+│   │   │   ├── ResultsSection.astro
+│   │   │   ├── HowItWorksSection.astro
+│   │   │   ├── StoryStatsSection.astro
+│   │   │   ├── TestimonialsSection.astro
+│   │   │   ├── FeaturesSection.astro
+│   │   │   ├── EngineSection.astro
+│   │   │   ├── DeepScanSection.astro
+│   │   │   └── CTASection.astro
+│   │   ├── pricing/
+│   │   │   ├── PricingCards.astro
+│   │   │   └── ComparisonTable.astro
+│   │   ├── auth/
+│   │   │   ── SignupForm.astro
+│   │   ── shared/
+│   │       └── FAQSection.astro
+│   ├── pages/
+│   │   ├── index.astro
+│   │   ├── pricing.astro
+│   │   └── signup.astro
+│   └── styles/
+│       └── global.css

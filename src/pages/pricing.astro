@@ -1,0 +1,37 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import PricingCards from '../components/PricingCards.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import FAQSection from '../components/FAQSection.astro';
+---
+
+<Layout title="Pricing — VerifyAI">
+  <Navbar currentPage="pricing" />
+  <main>
+    <PricingCards />
+    <ComparisonTable />
+    <FAQSection
+      faqs={[
+        {
+          question: "Is my data private during scans?",
+          answer: "Absolutely. We use end-to-end encryption. Images are analyzed in memory and immediately discarded. We never sell or store your personal data."
+        },
+        {
+          question: "Can I use Pro on multiple devices?",
+          answer: "Yes, a Pro subscription allows you to log in on up to 5 devices simultaneously, including mobile phones, tablets, and desktops."
+        },
+        {
+          question: "Can I switch plans later?",
+          answer: "Yes, you can upgrade or downgrade your plan at any time through your account settings. Changes are prorated automatically."
+        },
+        {
+          question: "What kind of support do I get?",
+          answer: "Free users get email support. Pro users get priority 24/7 access, and Team users get a dedicated security consultant for onboarding."
+        }
+      ]}
+    />
+  </main>
+  <Footer />
+</Layout>

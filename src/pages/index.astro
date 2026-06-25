@@ -1,213 +1,26 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import Scanner from '../components/Scanner.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import HeroSection from '../components/HeroSection.astro';
+import AnalysisSection from '../components/AnalysisSection.astro';
+import ResultsSection from '../components/ResultsSection.astro';
+import HowItWorksSection from '../components/HowItWorksSection.astro';
+import StoryStatsSection from '../components/StoryStatsSection.astro';
+import TestimonialsSection from '../components/TestimonialsSection.astro';
+import CTASection from '../components/CTASection.astro';
 ---
 
-<Layout title="SAFE - Scan & Verify" currentPage="scan">
-  <main class="main-home">
-    <Hero />
-    <Scanner />
-
-    <section class="modules-section">
-      <div class="container">
-        <h2 class="modules-title">All Modules</h2>
-        <p class="modules-desc">Everything you need to stay safe online</p>
-        <div class="modules-grid">
-          <a href="./learn" class="module-card">
-            <div class="module-icon" style="background: var(--cyan-soft); color: var(--cyan);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-              </svg>
-            </div>
-            <span class="module-name">Fraud Learning Center</span>
-            <span class="module-desc">Learn about scams</span>
-          </a>
-          <a href="./report" class="module-card">
-            <div class="module-icon" style="background: var(--warning-soft); color: var(--warning);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-            </div>
-            <span class="module-name">Community Report</span>
-            <span class="module-desc">Report a scam</span>
-          </a>
-          <a href="./emergency" class="module-card">
-            <div class="module-icon" style="background: var(--error-soft); color: var(--error);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            </div>
-            <span class="module-name">Emergency Center</span>
-            <span class="module-desc">Fraud response</span>
-          </a>
-          <a href="./score" class="module-card">
-            <div class="module-icon" style="background: var(--cyan-soft); color: var(--cyan);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-            </div>
-            <span class="module-name">SAFE Score</span>
-            <span class="module-desc">Digital safety rating</span>
-          </a>
-          <a href="./checkup" class="module-card">
-            <div class="module-icon" style="background: var(--violet-soft); color: var(--violet);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            </div>
-            <span class="module-name">Security Checkup</span>
-            <span class="module-desc">Audit your safety</span>
-          </a>
-          <a href="./assistant" class="module-card">
-            <div class="module-icon" style="background: var(--cyan-soft); color: var(--cyan);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            </div>
-            <span class="module-name">AI Assistant</span>
-            <span class="module-desc">Ask safety questions</span>
-          </a>
-          <a href="./news" class="module-card">
-            <div class="module-icon" style="background: var(--warning-soft); color: var(--warning);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9h2"/><line x1="10" y1="8" x2="18" y2="8"/><line x1="10" y1="12" x2="18" y2="12"/><line x1="10" y1="16" x2="14" y2="16"/></svg>
-            </div>
-            <span class="module-name">News & Alerts</span>
-            <span class="module-desc">Threat updates</span>
-          </a>
-          <a href="./family" class="module-card">
-            <div class="module-icon" style="background: var(--violet-soft); color: var(--violet);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </div>
-            <span class="module-name">Family Shield</span>
-            <span class="module-desc">Protect loved ones</span>
-          </a>
-          <a href="./database" class="module-card">
-            <div class="module-icon" style="background: var(--error-soft); color: var(--error);">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-            </div>
-            <span class="module-name">Threat Database</span>
-            <span class="module-desc">Known threats</span>
-          </a>
-        </div>
-      </div>
-    </section>
+<Layout title="VerifyAI — Free, Straightforward Scam Checking">
+  <Navbar currentPage="home" />
+  <main>
+    <HeroSection />
+    <AnalysisSection />
+    <ResultsSection />
+    <HowItWorksSection />
+    <StoryStatsSection />
+    <TestimonialsSection />
+    <CTASection />
   </main>
+  <Footer />
 </Layout>
-
-<style is:global>
-  .main-home {
-    width: 100%;
-    max-width: var(--max-width);
-    margin: 0 auto;
-  }
-
-  .modules-section {
-    padding: var(--space-5xl) 0;
-  }
-
-  .modules-title {
-    font-size: 1.75rem;
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    text-align: center;
-    color: var(--ink);
-    margin-bottom: var(--space-xxs);
-  }
-
-  .modules-desc {
-    font-size: 0.9375rem;
-    color: var(--body);
-    text-align: center;
-    margin-bottom: var(--space-xl);
-  }
-
-  .modules-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-sm);
-  }
-
-  .module-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-xs);
-    padding: var(--space-lg) var(--space-md);
-    background: var(--canvas);
-    border: 1px solid var(--hairline);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    text-align: center;
-    transition: var(--transition);
-    box-shadow: var(--shadow-level-1);
-  }
-
-  .module-card:hover {
-    border-color: var(--hairline-strong);
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-level-3);
-  }
-
-  .module-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--hairline);
-  }
-
-  .module-name {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--ink);
-    line-height: 1.3;
-    letter-spacing: -0.01em;
-  }
-
-  .module-desc {
-    font-size: 0.6875rem;
-    color: var(--mute);
-    line-height: 1.2;
-  }
-
-  @media (min-width: 640px) {
-    .modules-grid {
-      grid-template-columns: repeat(4, 1fr);
-      gap: var(--space-md);
-    }
-
-    .modules-title {
-      font-size: 2rem;
-    }
-  }
-
-  @media (min-width: 768px) {
-    .modules-grid {
-      gap: var(--space-md);
-    }
-
-    .module-card {
-      padding: var(--space-xl) var(--space-lg);
-    }
-
-    .module-card:hover {
-      transform: translateY(-4px);
-    }
-
-    .module-icon {
-      width: 52px;
-      height: 52px;
-    }
-
-    .module-name {
-      font-size: 0.875rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .modules-section {
-      padding: var(--space-5xl) 0;
-    }
-
-    .modules-title {
-      font-size: 2.25rem;
-    }
-
-    .modules-desc {
-      font-size: 1rem;
-    }
-  }
-</style>

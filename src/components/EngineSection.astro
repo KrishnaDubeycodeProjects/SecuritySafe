@@ -1,0 +1,241 @@
+<section class="engine" id="demo">
+  <div class="container">
+    <h2 class="section-title">Experience the <span class="gradient-text">AI Engine</span></h2>
+    <p class="section-subtitle">
+      See exactly how our neural network dismantles fraudulent patterns in milliseconds. We don't just look for keywords — we analyze visual hierarchy, metadata discrepancies, and psychological triggers.
+    </p>
+
+    <div class="engine-visual">
+      <div class="engine-steps">
+        <div class="engine-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Upload & Pre-process</h4>
+            <p>Image is normalized and prepared for multi-vector analysis.</p>
+          </div>
+        </div>
+
+        <div class="engine-step-arrow">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00E676" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+
+        <div class="engine-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Multi-Vector Analysis</h4>
+            <p>OCR, phishing URL detection, and brand matching run in parallel.</p>
+          </div>
+        </div>
+
+        <div class="engine-step-arrow">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00E676" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+
+        <div class="engine-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Risk Verdict</h4>
+            <p>Start simulated scan — get a clear SAFE or SCAM result instantly.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="engine-demo">
+        <div class="demo-header">
+          <div class="demo-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
+          <span class="demo-title">VerifyAI — Neural Scan</span>
+        </div>
+        <div class="demo-body">
+          <div class="demo-scan-line">
+            <span class="scan-label">Awaiting Image...</span>
+            <span class="scan-status pending">Ready</span>
+          </div>
+          <div class="demo-scan-line">
+            <span class="scan-label">OCR Analysis</span>
+            <span class="scan-status active">Scanning</span>
+          </div>
+          <div class="demo-scan-line">
+            <span class="scan-label">URL Dissection</span>
+            <span class="scan-status active">Scanning</span>
+          </div>
+          <div class="demo-scan-line">
+            <span class="scan-label">Brand Match</span>
+            <span class="scan-status done">Verified ✓</span>
+          </div>
+          <div class="demo-scan-line">
+            <span class="scan-label">Risk Verdict</span>
+            <span class="scan-status verdict">SAFE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .engine {
+    padding: 100px 0;
+    background: linear-gradient(180deg, var(--bg-dark) 0%, #0d1220 100%);
+  }
+
+  .engine-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .engine-steps {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .engine-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    max-width: 280px;
+    transition: all 0.3s;
+  }
+
+  .engine-step:hover {
+    border-color: rgba(0, 230, 118, 0.3);
+  }
+
+  .step-number {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    color: #000;
+    font-weight: 800;
+    font-size: 1rem;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+
+  .step-content h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .step-content p {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+
+  .engine-step-arrow {
+    color: var(--primary);
+    flex-shrink: 0;
+  }
+
+  .engine-demo {
+    width: 100%;
+    max-width: 700px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .demo-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .demo-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .dot.red { background: #ff5f57; }
+  .dot.yellow { background: #ffbd2e; }
+  .dot.green { background: #28c840; }
+
+  .demo-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .demo-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .demo-scan-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--bg-input);
+    border-radius: 10px;
+  }
+
+  .scan-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .scan-status {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 6px;
+  }
+
+  .scan-status.pending {
+    color: var(--text-muted);
+  }
+
+  .scan-status.active {
+    color: var(--primary);
+    background: rgba(0, 230, 118, 0.1);
+  }
+
+  .scan-status.done {
+    color: #28c840;
+  }
+
+  .scan-status.verdict {
+    color: #000;
+    background: var(--primary);
+    font-weight: 700;
+  }
+
+  @media (max-width: 768px) {
+    .engine-steps {
+      flex-direction: column;
+    }
+    .engine-step-arrow {
+      transform: rotate(90deg);
+    }
+  }
+</style>

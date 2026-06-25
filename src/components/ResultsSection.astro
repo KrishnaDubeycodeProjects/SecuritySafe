@@ -1,0 +1,49 @@
+<section class="results section">
+  <div class="container">
+    <h2 class="section-title">Clear, Simple <span class="gradient-text">Verdicts</span></h2>
+    <p class="section-subtitle">Get a straightforward answer in seconds. No jargon. No judgement.</p>
+
+    <div class="results-grid">
+      <div class="result-card safe">
+        <div class="result-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00E676" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 12 15 16 10"/></svg>
+        </div>
+        <h3>Safe</h3>
+        <p>Nothing detected. This looks like a legitimate source.</p>
+      </div>
+
+      <div class="result-card caution">
+        <div class="result-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <h3>Caution</h3>
+        <p>Be cautious. Some elements look suspicious. Double-check the address.</p>
+      </div>
+
+      <div class="result-card unsafe">
+        <div class="result-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        </div>
+        <h3>Unsafe</h3>
+        <p>High risk detected. This matches known scam patterns. Do not click.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .result-card {
+    padding: 32px 24px; background: var(--bg-card); border: 1px solid var(--border-color);
+    border-radius: 16px; text-align: center; transition: all 0.3s;
+  }
+  .result-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .result-icon {
+    width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;
+    background: var(--bg-input); border-radius: 50%; margin: 0 auto 20px;
+  }
+  .result-card h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; }
+  .result-card p { color: var(--text-secondary); font-size: 0.9rem; }
+  
+  @media (max-width: 768px) { .results-grid { grid-template-columns: 1fr; } }
+</style>

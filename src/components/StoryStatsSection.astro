@@ -1,0 +1,40 @@
+<section class="story-stats section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-number gradient-text">£150k+</span>
+        <span class="stat-label">Lost to scammers yearly per victim</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number gradient-text">40,000+</span>
+        <span class="stat-label">Scams detected and blocked</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number gradient-text">30s</span>
+        <span class="stat-label">Average time to get a verdict</span>
+      </div>
+    </div>
+
+    <div class="story-content">
+      <h2 class="story-title">The Threat from Scammers is <span class="gradient-text">Growing</span></h2>
+      <p class="story-text">
+        Modern scams look real, sound real, and feel real. AI helps scammers mimic trusted sources, making them harder than ever to spot. Scammers use pressure and urgency to trick you in a split second. 
+        <br><br>
+        <strong>Scams can catch anyone.</strong> Even the careful can get caught. A quick check, anytime. VerifyAI gives you a fast, simple way to check scam threats before you click. No jargon. No judgement.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 80px; }
+  .stat-item { text-align: center; padding: 32px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; }
+  .stat-number { display: block; font-size: 2.5rem; font-weight: 900; margin-bottom: 8px; }
+  .stat-label { color: var(--text-secondary); font-size: 0.9rem; }
+  
+  .story-content { max-width: 800px; margin: 0 auto; text-align: center; }
+  .story-title { font-size: 2rem; font-weight: 800; margin-bottom: 24px; }
+  .story-text { font-size: 1.1rem; color: var(--text-secondary); line-height: 1.8; }
+  
+  @media (max-width: 768px) { .stats-grid { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,130 @@
+---
+interface Props {
+  faqs?: Array<{ question: string; answer: string }>;
+}
+
+const { faqs = [
+  {
+    question: "How accurate is the VerifyAI scam detection engine?",
+    answer: "Our engine achieves 99.7% accuracy across all scan types, trained on millions of verified scam samples and continuously updated with new threat patterns."
+  },
+  {
+    question: "What happens to the images I upload for scanning?",
+    answer: "Images are analyzed in memory and immediately discarded. We use end-to-end encryption and never store or sell your personal data."
+  },
+  {
+    question: "Can it detect 'Deepfake' text or audio-based scams?",
+    answer: "Yes. Our multi-vector analysis includes deepfake detection for text patterns, synthetic voice analysis, and AI-generated content identification."
+  },
+  {
+    question: "Does it work with non-English screenshots?",
+    answer: "Absolutely. VerifyAI supports 40+ languages with real-time translation and cross-lingual scam pattern detection."
+  }
+]} = Astro.props;
+---
+
+<section class="faq" id="faq">
+  <div class="container">
+    <h2 class="section-title">Frequently Asked <span class="gradient-text">Questions</span></h2>
+    <p class="section-subtitle">Everything you need to know about our technology and security practices.</p>
+
+    <div class="faq-list">
+      {faqs.map((faq, i) => (
+        <div class="faq-item" data-faq={i}>
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>{faq.question}</span>
+            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <p>{faq.answer}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq {
+    padding: 100px 0;
+  }
+
+  .faq-list {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .faq-item.open {
+    border-color: rgba(0, 230, 118, 0.3);
+  }
+
+  .faq-question {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: left;
+    transition: color 0.2s;
+  }
+
+  .faq-question:hover {
+    color: var(--primary);
+  }
+
+  .faq-chevron {
+    flex-shrink: 0;
+    transition: transform 0.3s;
+    color: var(--text-muted);
+  }
+
+  .faq-item.open .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--primary);
+  }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+
+  .faq-item.open .faq-answer {
+    max-height: 200px;
+    padding: 0 24px 20px;
+  }
+
+  .faq-answer p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+</style>
+
+<script>
+  function toggleFaq(btn: HTMLButtonElement) {
+    const item = btn.closest('.faq-item');
+    const wasOpen = item?.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
+    if (item && !wasOpen) {
+      item.classList.add('open');
+    }
+  }
+</script>

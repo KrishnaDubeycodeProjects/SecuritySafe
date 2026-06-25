@@ -1,0 +1,59 @@
+<section class="testimonials section">
+  <div class="container">
+    <h2 class="section-title">What People <span class="gradient-text">Say</span></h2>
+    <p class="section-subtitle">Join thousands who use VerifyAI to protect their digital lives.</p>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <p class="quote">"I was sceptical at first, but VerifyAI caught a fake banking email that looked 100% real. It saved me from losing my savings."</p>
+        <div class="author">
+          <div class="avatar">M</div>
+          <div>
+            <h4>Mel</h4>
+            <span>Verified User</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <p class="quote">"My local trading standards officer recommended VerifyAI. It's nice and simple to check anything suspicious before I click."</p>
+        <div class="author">
+          <div class="avatar">J</div>
+          <div>
+            <h4>Jonny</h4>
+            <span>Verified User</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <p class="quote">"The WhatsApp integration is a game changer. I can forward suspicious texts directly and get an instant verdict."</p>
+        <div class="author">
+          <div class="avatar">S</div>
+          <div>
+            <h4>Sarah</h4>
+            <span>Pro User</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .testimonial-card {
+    padding: 32px; background: var(--bg-card); border: 1px solid var(--border-color);
+    border-radius: 16px; display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .quote { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 24px; font-style: italic; }
+  .author { display: flex; align-items: center; gap: 12px; }
+  .avatar {
+    width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+    background: var(--primary); color: #000; font-weight: 700; border-radius: 50%;
+  }
+  .author h4 { font-size: 0.9rem; font-weight: 700; }
+  .author span { font-size: 0.8rem; color: var(--text-muted); }
+  
+  @media (max-width: 768px) { .testimonials-grid { grid-template-columns: 1fr; } }
+</style>

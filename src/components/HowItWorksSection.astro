@@ -1,0 +1,50 @@
+<section class="how-it-works section" id="how-it-works">
+  <div class="container">
+    <h2 class="section-title">How It <span class="gradient-text">Works</span></h2>
+    <p class="section-subtitle">Smart scam detection in four simple steps.</p>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Spotted something that feels off?</h3>
+        <p>We've all come across things that don't look quite right. Whether it's a letter, website, or email, it's always worth getting a second opinion.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Send it to VerifyAI</h3>
+        <p>You can check screenshots, photos, phone numbers, or website links. It's available on our website or via mobile, and always free.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Get a clear response in seconds</h3>
+        <p>We analyse what you've sent using hundreds of tools, trusted sources, and a touch of AI magic. In less than 30 seconds, you'll get a simple verdict.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <h3>Effortlessly report scams</h3>
+        <p>If we spot a scam, you can report it with a tap. We'll share it with the authorities and any organisations being impersonated.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .steps-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .step-card {
+    padding: 32px; background: var(--bg-card); border: 1px solid var(--border-color);
+    border-radius: 16px; position: relative; transition: all 0.3s;
+  }
+  .step-card:hover { border-color: rgba(0, 230, 118, 0.3); transform: translateY(-2px); }
+  .step-number {
+    width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+    background: var(--primary); color: #000; font-weight: 800; font-size: 1rem;
+    border-radius: 10px; margin-bottom: 20px;
+  }
+  .step-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+  .step-card p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
+  
+  @media (max-width: 768px) { .steps-grid { grid-template-columns: 1fr; } }
+</style>
