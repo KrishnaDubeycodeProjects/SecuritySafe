@@ -1,5 +1,6 @@
 ---
 // src/components/ScannerInput.astro
+const MAIN_API = import.meta.env.PUBLIC_MAIN_API_URL ?? 'http://localhost:8000';
 ---
 
 <section class="scanner-section" id="scanner">
@@ -98,7 +99,7 @@
   </div>
 </section>
 
-<script>
+<script define:vars={{ MAIN_API }}>
   let activeChannel = 'text';
 
   window.switchChannel = function(channel) {
@@ -178,7 +179,7 @@
       const urlRegex = /^(http|https):\/\/[^ "]+$/;
       const isUrlOnly = urlRegex.test(text);
       let endpoint = isUrlOnly ? '/api/scan/link' : '/api/scan/text';
-      endpoint = 'http://localhost:8000' + endpoint;
+      endpoint = MAIN_API + endpoint;
       const body = isUrlOnly ? JSON.stringify({ url: text }) : JSON.stringify({ text: text });
 
       const response = await fetch(endpoint, {
@@ -203,7 +204,7 @@
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch('http://localhost:8000/api/scan/image', {
+      const response = await fetch(MAIN_API + '/api/scan/image', {
         method: 'POST',
         body: formData
       });

@@ -1,5 +1,6 @@
 ---
 // src/components/FeedbackForm.astro
+const MAIN_API = import.meta.env.PUBLIC_MAIN_API_URL ?? 'http://localhost:8000';
 ---
 
 <div class="form-container">
@@ -41,7 +42,7 @@
     <button class="reset-btn" onclick="resetForm()">Send Another</button>
   </div>
 </div>
-<script>
+<script define:vars={{ MAIN_API }}>
   const form = document.getElementById('feedback-form');
   const submitBtn = document.getElementById('submit-btn');
   const btnText = submitBtn.querySelector('.btn-text');
@@ -66,7 +67,7 @@
 
     try {
       // 3. Make the API call
-      const response = await fetch('http://localhost:8000/api/feedback', {
+      const response = await fetch(MAIN_API + '/api/feedback', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

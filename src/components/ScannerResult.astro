@@ -1,6 +1,7 @@
 ---
 // src/components/ScanResult.astro
 // Add this interface and destructuring to prevent SSR errors
+const MAIN_API = import.meta.env.PUBLIC_MAIN_API_URL ?? 'http://localhost:8000';
 ---
 
 <section class="result-section hidden" id="scan-result">
@@ -127,27 +128,27 @@
   </div>
 </section>
 
-<script>
+<script define:vars={{ MAIN_API }}>
   // DOM Elements
   const chatFab = document.getElementById('ss-fab');
   const chatDrawer = document.getElementById('ss-drawer');
   const closeBtn = document.getElementById('ss-close-btn');
   const chatMessages = document.getElementById('ss-messages');
   const chatForm = document.getElementById('ss-form');
-  const chatInput = document.getElementById('ss-input') as HTMLInputElement;
+  const chatInput = document.getElementById('ss-input');
   const typingIndicator = document.getElementById('ss-typing');
-  const fileInput = document.getElementById('ss-file-input') as HTMLInputElement;
+  const fileInput = document.getElementById('ss-file-input');
   const attachBtn = document.getElementById('ss-attach-btn');
   const imagePreview = document.getElementById('ss-image-preview');
-  const previewImg = document.getElementById('ss-preview-img') as HTMLImageElement;
+  const previewImg = document.getElementById('ss-preview-img');
   const removeImgBtn = document.getElementById('ss-remove-img');
   const imgModal = document.getElementById('ss-img-modal');
-  const modalImg = document.getElementById('ss-modal-img') as HTMLImageElement;
+  const modalImg = document.getElementById('ss-modal-img');
   const modalClose = document.querySelector('.ss-img-modal-close');
 
   // State
-  let selectedImageBase64: string | null = null;
-  let selectedFile: File | null = null;
+  let selectedImageBase64 = null;
+  let selectedFile = null;
 
   // --- UI Toggles ---
   if(chatFab) chatFab.addEventListener('click', () => {
@@ -164,12 +165,12 @@
   // --- Image Handling ---
   if(attachBtn) attachBtn.addEventListener('click', () => fileInput.click());
   if(fileInput) fileInput.addEventListener('change', (e) => {
-    const file = (e.target as HTMLInputElement).files?.[0];
+    const file = e.target.files?.[0];
     if (!file) return;
     selectedFile = file; 
     const reader = new FileReader();
     reader.onload = (event) => {
-      selectedImageBase64 = event.target?.result as string;
+      selectedImageBase64 = event.target?.result;
       previewImg.src = selectedImageBase64;
       imagePreview.classList.remove('hidden');
     };
@@ -184,7 +185,7 @@
   });
 
   // --- Image Modal ---
-  function openImageModal(src: string) {
+  function openImageModal(src) {
     modalImg.src = src;
     imgModal.classList.add('show');
   }
@@ -216,7 +217,7 @@
     if (fileToSend) formData.append('image', fileToSend); 
 
     try {
-      const response = await fetch('/api/v1/chat', {
+      const response = await fetch(MAIN_API + '/api/v1/chat', {
         method: 'POST',
         body: formData
       });
@@ -234,7 +235,7 @@
   });
 
   // --- API Response Handling ---
-  function handleApiResponse(data: any) {
+  function handleApiResponse(data) {
     // 1. Global Hallucination Check
     if (data.intent_detected === 'hallucination' || data.is_hallucination === true) {
       appendBotMessage(`⚠️ Hallucination detected. Redirecting to home...`);
@@ -282,7 +283,7 @@
   }
 
   // --- Helper Functions ---
-  function appendUserMessage(text: string, imageSrc: string | null) {
+  function appendUserMessage(text, imageSrc) {
     const msgDiv = document.createElement('div');
     msgDiv.className = 'ss-message user';
     let bubbleContent = '';
@@ -296,7 +297,7 @@
     scrollToBottom();
   }
 
-  function appendBotMessage(text: string) {
+  function appendBotMessage(text) {
     const msg = document.createElement('div');
     msg.className = 'ss-message assistant';
     msg.innerHTML = `<div class="ss-bubble"><div class="ss-text">${escapeHtml(text)}</div></div>`;
@@ -305,7 +306,7 @@
   }
 
   // Creates the Box with "Security Scan Complete" header AND the Scanner Result UI inside it
-  function appendScanResultBox(payload: any) {
+  function appendScanResultBox(payload) {
     // 🛡️ SAFETY GUARD: Do not render the scanner UI if the payload is somehow empty
     if (!payload || (typeof payload === 'object' && Object.keys(payload).length === 0)) {
       return;
@@ -381,7 +382,7 @@
   }
 
   // Populates the injected Scanner Result UI with actual data from custom_payload
-  function renderScannerData(container: HTMLElement, data: any) {
+  function renderScannerData(container, data) {
     const score = Math.round((data.score || 0) * 100);
     const isSafe = score > 70;
     
@@ -401,10 +402,10 @@
     // Checks
     const checkDescs = container.querySelectorAll('.sr-dynamic');
     if (data.keywords && data.keywords.length > 0) {
-      if(checkDescs[0]) checkDescs[0].textContent = `${data.keywords.filter((k: string) => k.includes('http') || k.includes('www')).length || 0} link(s) analyzed`;
+      if(checkDescs[0]) checkDescs[0].textContent = `${data.keywords.filter((k) => k.includes('http') || k.includes('www')).length || 0} link(s) analyzed`;
       if(checkDescs[1]) checkDescs[1].textContent = 'Language patterns reviewed';
-      if(checkDescs[2]) checkDescs[2].textContent = data.keywords.some((k: string) => k.match(/urgent|immediately|act now/i)) ? 'Urgency detected' : 'No urgency found';
-      if(checkDescs[3]) checkDescs[3].textContent = data.keywords.some((k: string) => k.match(/password|ssn|account|bank/i)) ? 'Sensitive terms detected' : 'No data requests';
+      if(checkDescs[2]) checkDescs[2].textContent = data.keywords.some((k) => k.match(/urgent|immediately|act now/i)) ? 'Urgency detected' : 'No urgency found';
+      if(checkDescs[3]) checkDescs[3].textContent = data.keywords.some((k) => k.match(/password|ssn|account|bank/i)) ? 'Sensitive terms detected' : 'No data requests';
     } else {
       if(checkDescs[0]) checkDescs[0].textContent = 'No suspicious links detected';
       if(checkDescs[1]) checkDescs[1].textContent = 'Normal communication style';
@@ -421,7 +422,7 @@
       adviceText.textContent = adviceList[0];
       if(adviceTips) {
         adviceTips.innerHTML = '';
-        adviceList.slice(1).forEach((tip: string) => {
+        adviceList.slice(1).forEach((tip) => {
           adviceTips.innerHTML += `<div class="sr-tip-item">• ${tip}</div>`;
         });
       }
@@ -431,7 +432,7 @@
     const stepsContainer = container.querySelector('.sr-steps-list');
     if (data.cascade_steps && data.cascade_steps.length > 0 && stepsContainer) {
       stepsContainer.innerHTML = '';
-      data.cascade_steps.forEach((step: string, index: number) => {
+      data.cascade_steps.forEach((step, index) => {
         let stepTitle = step;
         let stepDesc = 'Analysis step completed';
         if (step.includes('Layer 0')) { stepTitle = 'Content Preparation'; stepDesc = 'Cleaned and organized message'; } 
@@ -451,7 +452,7 @@
   }
 
   // --- NEW: Full Page Result Renderer ---
-  window.renderDetailedResult = function(data: any) {
+  window.renderDetailedResult = function(data) {
     const section = document.getElementById('scan-result');
     if (!section) return;
 
@@ -485,10 +486,10 @@
     // Checks
     const checkDescs = section.querySelectorAll('.check-dynamic');
     if (data.keywords && data.keywords.length > 0) {
-      if(checkDescs[0]) checkDescs[0].textContent = `${data.keywords.filter((k: string) => k.includes('http') || k.includes('www')).length || 0} link(s) analyzed`;
+      if(checkDescs[0]) checkDescs[0].textContent = `${data.keywords.filter((k) => k.includes('http') || k.includes('www')).length || 0} link(s) analyzed`;
       if(checkDescs[1]) checkDescs[1].textContent = 'Language patterns reviewed';
-      if(checkDescs[2]) checkDescs[2].textContent = data.keywords.some((k: string) => k.match(/urgent|immediately|act now/i)) ? 'Urgency detected' : 'No urgency found';
-      if(checkDescs[3]) checkDescs[3].textContent = data.keywords.some((k: string) => k.match(/password|ssn|account|bank/i)) ? 'Sensitive terms detected' : 'No data requests';
+      if(checkDescs[2]) checkDescs[2].textContent = data.keywords.some((k) => k.match(/urgent|immediately|act now/i)) ? 'Urgency detected' : 'No urgency found';
+      if(checkDescs[3]) checkDescs[3].textContent = data.keywords.some((k) => k.match(/password|ssn|account|bank/i)) ? 'Sensitive terms detected' : 'No data requests';
     } else {
       if(checkDescs[0]) checkDescs[0].textContent = 'No suspicious links detected';
       if(checkDescs[1]) checkDescs[1].textContent = 'Normal communication style';
@@ -505,7 +506,7 @@
       adviceText.textContent = adviceList[0];
       if(adviceTips) {
         adviceTips.innerHTML = '';
-        adviceList.slice(1).forEach((tip: string) => {
+        adviceList.slice(1).forEach((tip) => {
           adviceTips.innerHTML += `<div class="tip-item"><span class="tip-bullet">•</span><span>${escapeHtml(tip)}</span></div>`;
         });
       }
@@ -518,7 +519,7 @@
     const stepsContainer = section.querySelector('.analysis-steps-dynamic');
     if (data.cascade_steps && data.cascade_steps.length > 0 && stepsContainer) {
       stepsContainer.innerHTML = '';
-      data.cascade_steps.forEach((step: string, index: number) => {
+      data.cascade_steps.forEach((step, index) => {
         let stepTitle = step;
         let stepDesc = 'Analysis step completed';
         if (step.includes('Layer 0')) { stepTitle = 'Content Preparation'; stepDesc = 'Cleaned and organized message'; } 
@@ -549,9 +550,44 @@
     }, 300);
   };
 
-  // --- NEW: Reset Scanner (Refresh Page) ---
+  // --- Smooth In-Page Scanner Reset ---
   window.resetScanner = function() {
-    window.location.reload();
+    const resultSection = document.getElementById('scan-result');
+    const inputSection = document.getElementById('scanner');
+    const formsPanel = document.querySelector('.forms-panel');
+    const tabs = document.querySelector('.scanner-tabs');
+    const loader = document.getElementById('scanner-loader');
+    const textInput = document.getElementById('scan-text-input');
+    const fileInput = document.getElementById('image-file');
+    const filenameLabel = document.getElementById('image-filename');
+
+    if (resultSection) {
+      resultSection.style.opacity = '0';
+      resultSection.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        resultSection.classList.add('hidden');
+      }, 350);
+    }
+
+    if (textInput) textInput.value = '';
+    if (fileInput) fileInput.value = '';
+    if (filenameLabel) {
+      filenameLabel.innerText = 'Drop your image here or click to browse';
+      filenameLabel.closest('.upload-box')?.classList.remove('has-file');
+    }
+
+    if (loader) loader.classList.add('hidden');
+    if (formsPanel) formsPanel.classList.remove('hidden');
+    if (tabs) tabs.classList.remove('hidden');
+
+    if (inputSection) {
+      inputSection.classList.remove('hidden', 'fade-out-up');
+      inputSection.style.opacity = '1';
+      inputSection.style.transform = 'translateY(0)';
+      setTimeout(() => {
+        inputSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
   };
 
   // --- NEW: Share Result ---
@@ -570,7 +606,7 @@
   };
 
   function scrollToBottom() { chatMessages.scrollTop = chatMessages.scrollHeight; }
-  function escapeHtml(text: string) {
+  function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;

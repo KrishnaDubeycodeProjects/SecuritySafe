@@ -10,6 +10,8 @@ const navItems = [
   { id: 'scan', label: 'Scan', path: '/' },
   { id: 'learn', label: 'Learn', path: '/learn' },
   { id: 'emergency', label: 'Emergency', path: '/emergency' },
+  { id: 'community', label: 'Community', path: '/community' },
+  { id: 'blogs', label: 'Blogs', path: '/blogs' },
   { id: 'safe-saathi', label: 'Safe-saathi', path: '/safe-saathi' },
   { id: 'feedback', label: 'Feedback', path: '/feedback' },
 ];
@@ -25,18 +27,37 @@ const navItems = [
       <span class="nav-logo-text">SAFE</span>
     </a>
 
-    <!-- Desktop Links -->
+    <!-- Desktop Links: all items always rendered; More dropdown hidden on 1200px+ via CSS -->
     <div class="nav-links" id="navLinks">
       {
         navItems.map((item) => (
           <a
             href={item.path}
-            class:list={{ 'nav-link': true, active: currentPage === item.id }}
+            class:list={{ 'nav-link': true, 'nav-link--overflow': navItems.indexOf(item) >= 4, active: currentPage === item.id }}
           >
             {item.label}
           </a>
         ))
       }
+      <!-- More dropdown for tablet (768-1199px): shows items 5+ that are hidden via CSS at tablet -->
+      <div class="nav-more" id="navMore">
+        <button class="nav-more-btn" id="navMoreBtn" aria-haspopup="true" aria-expanded="false">
+          More
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="nav-dropdown" id="navDropdown">
+          {
+            navItems.slice(4).map((item) => (
+              <a
+                href={item.path}
+                class:list={{ 'nav-dropdown-link': true, active: currentPage === item.id }}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
     </div>
 
     <div class="nav-actions">
@@ -93,11 +114,8 @@ const navItems = [
 </div>
 
 <script>
-  //Menu Logic
   (function() {
-   
-
-    // 2. Mobile Menu Toggle
+    // Mobile Menu Toggle
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const overlay = document.getElementById('mobileNavOverlay');
     const sidebar = document.getElementById('mobileNavSidebar');
@@ -107,10 +125,9 @@ const navItems = [
       if(overlay && sidebar) {
         overlay.classList.add('active');
         sidebar.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Prevent background scroll
+        document.body.style.overflow = 'hidden';
       }
     }
-
     function closeMenu() {
       if(overlay && sidebar) {
         overlay.classList.remove('active');
@@ -118,12 +135,26 @@ const navItems = [
         document.body.style.overflow = '';
       }
     }
-
     if(mobileMenuBtn) mobileMenuBtn.addEventListener('click', openMenu);
     if(closeBtn) closeBtn.addEventListener('click', closeMenu);
     if(overlay) overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) closeMenu(); // Close when clicking outside
+      if (e.target === overlay) closeMenu();
     });
+
+    // More dropdown toggle
+    const moreBtn = document.getElementById('navMoreBtn');
+    const dropdown = document.getElementById('navDropdown');
+    if (moreBtn && dropdown) {
+      moreBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = dropdown.classList.toggle('open');
+        moreBtn.setAttribute('aria-expanded', String(open));
+      });
+      document.addEventListener('click', () => {
+        dropdown.classList.remove('open');
+        moreBtn.setAttribute('aria-expanded', 'false');
+      });
+    }
   })();
 </script>
 
@@ -206,6 +237,55 @@ const navItems = [
     background: var(--canvas-soft, #F7F7F7);
     font-weight: 600;
   }
+
+  /* More dropdown (tablet) */
+  .nav-more { position: relative; }
+
+  .nav-more-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--body, #525252);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  .nav-more-btn:hover { color: var(--ink, #0A0A0A); background: var(--canvas-soft, #F7F7F7); }
+
+  .nav-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--hairline, #E5E5E5);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.12);
+    min-width: 160px;
+    flex-direction: column;
+    padding: 6px;
+    z-index: 200;
+  }
+  .nav-dropdown.open { display: flex; }
+
+  .nav-dropdown-link {
+    padding: 9px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--body, #525252);
+    text-decoration: none;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  .nav-dropdown-link:hover,
+  .nav-dropdown-link.active { background: var(--canvas-soft, #F7F7F7); color: var(--ink, #0A0A0A); }
 
 
   .nav-actions {
@@ -349,55 +429,40 @@ const navItems = [
     margin: 0;
   }
 
-  /* Tablet / Small Desktop */
+  /* Tablet / Small Desktop — show primary 4 links + More dropdown */
   @media (min-width: 768px) {
     .nav-links {
       display: flex;
     }
-
+    /* Hide overflow items (5-7) at tablet — they appear in More dropdown */
+    .nav-link--overflow {
+      display: none;
+    }
+    .nav-link {
+      padding: 7px 11px;
+      font-size: 13px;
+    }
     .mobile-menu-btn {
       display: none;
     }
-
     .nav-inner {
-      padding: 0 32px;
+      padding: 0 24px;
     }
   }
 
-  /* Large Laptop / Desktop Enhancements */
+  /* Large Laptop / Desktop — show all links, hide More dropdown */
   @media (min-width: 1200px) {
-    .navbar {
-      height: var(--nav-height, 80px);
-    }
-
-    .nav-inner {
-      max-width: var(--max-width, 1400px);
-      padding: 0 64px;
-    }
-
-    .nav-logo svg {
-      width: 32px;
-      height: 32px;
-    }
-
-    .nav-logo-text {
-      font-size: 24px;
-    }
-
-    .nav-links {
-      gap: 8px;
-    }
-
-    .nav-link {
-      font-size: 16px;
-      padding: 10px 20px;
-    }
-
-    .nav-actions {
-      gap: 20px;
-    }
-
- 
+    .navbar      { height: var(--nav-height, 80px); }
+    .nav-inner   { max-width: var(--max-width, 1400px); padding: 0 64px; }
+    .nav-logo svg   { width: 32px; height: 32px; }
+    .nav-logo-text  { font-size: 24px; }
+    .nav-links      { gap: 8px; }
+    .nav-link       { font-size: 15px; padding: 9px 16px; }
+    /* Show all overflow items inline on large desktop */
+    .nav-link--overflow { display: flex; }
+    .nav-actions    { gap: 20px; }
+    /* Hide More dropdown entirely on large screens */
+    .nav-more       { display: none; }
   }
 
   @media (max-width: 767px) {

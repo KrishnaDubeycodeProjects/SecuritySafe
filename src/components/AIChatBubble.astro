@@ -1,5 +1,6 @@
 ---
 // SafeSaathiChat.astro
+const MAIN_API = import.meta.env.PUBLIC_MAIN_API_URL ?? 'http://localhost:8000';
 ---
 
 <div class="ss-chat-container">
@@ -34,7 +35,13 @@
     <div class="ss-messages" id="ss-messages">
       <div class="ss-message system">
         <div class="ss-bubble">
-          👋 Hello! I am Safe Saathi AI. Ask me anything or upload an image to scan for cybersecurity threats.
+          🛡️ <strong>Namaste! I'm SAFE Saathi</strong> — your digital safety assistant.<br/>
+          Share a suspicious message, link, or screenshot and I'll check it instantly.
+          <div class="ss-quick-hints">
+            <span>💬 Paste a suspicious message</span>
+            <span>🔗 Share a link to verify</span>
+            <span>📸 Upload a screenshot</span>
+          </div>
         </div>
       </div>
     </div>
@@ -77,49 +84,99 @@
   </div>
 </div>
 
-<script>
+<script define:vars={{ MAIN_API }}>
+  // ── Persistent session ID (survives page refresh, not browser close) ────────
+  let sessionId = sessionStorage.getItem('ss_session_id');
+  if (!sessionId) {
+    sessionId = 'ss_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+    sessionStorage.setItem('ss_session_id', sessionId);
+  }
+
+  // ── Daily usage counter (client-side mirror of 50/day server limit) ──────────
+  const TODAY = new Date().toDateString();
+  let usageKey = 'ss_usage_' + TODAY;
+  let usageCount = parseInt(localStorage.getItem(usageKey) || '0', 10);
+  const DAILY_LIMIT = 50;
+
+  function _bumpUsage() {
+    usageCount++;
+    localStorage.setItem(usageKey, String(usageCount));
+  }
+  function _isLimitReached() { return usageCount >= DAILY_LIMIT; }
+
   // DOM Elements
   const chatFab = document.getElementById('ss-fab');
   const chatDrawer = document.getElementById('ss-drawer');
   const closeBtn = document.getElementById('ss-close-btn');
   const chatMessages = document.getElementById('ss-messages');
   const chatForm = document.getElementById('ss-form');
-  const chatInput = document.getElementById('ss-input') as HTMLInputElement;
+  const chatInput = document.getElementById('ss-input');
   const typingIndicator = document.getElementById('ss-typing');
-  const fileInput = document.getElementById('ss-file-input') as HTMLInputElement;
+  const fileInput = document.getElementById('ss-file-input');
   const attachBtn = document.getElementById('ss-attach-btn');
   const imagePreview = document.getElementById('ss-image-preview');
-  const previewImg = document.getElementById('ss-preview-img') as HTMLImageElement;
+  const previewImg = document.getElementById('ss-preview-img');
   const removeImgBtn = document.getElementById('ss-remove-img');
   const imgModal = document.getElementById('ss-img-modal');
-  const modalImg = document.getElementById('ss-modal-img') as HTMLImageElement;
+  const modalImg = document.getElementById('ss-modal-img');
   const modalClose = document.querySelector('.ss-img-modal-close');
 
-  // State
-  let selectedImageBase64: string | null = null;
-  let selectedFile: File | null = null;
+  // ── Escape HTML helper (XSS prevention) ─────────────────────────────────────
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
 
-  // --- UI Toggles ---
+  // ── Check limit on open ──────────────────────────────────────────────────────
   chatFab.addEventListener('click', () => {
-    chatDrawer.classList.remove('hidden');
-    chatFab.classList.add('hidden');
-    chatInput.focus();
+    chatDrawer.classList.toggle('hidden');
+    if (!chatDrawer.classList.contains('hidden')) {
+      chatInput.focus();
+      scrollToBottom();
+      if (_isLimitReached()) _showLimitWarning();
+    }
   });
+  closeBtn.addEventListener('click', () => chatDrawer.classList.add('hidden'));
 
-  closeBtn.addEventListener('click', () => {
-    chatDrawer.classList.add('hidden');
-    chatFab.classList.remove('hidden');
-  });
+  function _showLimitWarning() {
+    chatInput.disabled = true;
+    chatInput.placeholder = 'Daily limit reached (50 messages). Try again tomorrow.';
+    document.querySelector('.ss-send-btn').disabled = true;
+    document.getElementById('ss-attach-btn').disabled = true;
+    // Show a single warning message if not already shown
+    if (!document.getElementById('ss-limit-msg')) {
+      const w = document.createElement('div');
+      w.id = 'ss-limit-msg';
+      w.className = 'ss-message system';
+      w.innerHTML = `<div class="ss-bubble ss-limit-bubble">⏳ You've reached today's limit of ${DAILY_LIMIT} messages. Your limit resets at midnight. For urgent help, call <strong>1930</strong> (Cyber Crime Helpline).</div>`;
+      chatMessages.appendChild(w);
+      scrollToBottom();
+    }
+  }
+
+  function _reEnableInput() {
+    chatInput.disabled = false;
+    chatInput.placeholder = 'Type a message...';
+    document.querySelector('.ss-send-btn').disabled = false;
+    document.getElementById('ss-attach-btn').disabled = false;
+  }
+
+  // State
+  let selectedImageBase64 = null;
+  let selectedFile = null;
 
   // --- Image Handling ---
   attachBtn.addEventListener('click', () => fileInput.click());
   fileInput.addEventListener('change', (e) => {
-    const file = (e.target as HTMLInputElement).files?.[0];
+    const file = (e.target).files?.[0];
     if (!file) return;
     selectedFile = file; 
     const reader = new FileReader();
     reader.onload = (event) => {
-      selectedImageBase64 = event.target?.result as string;
+      selectedImageBase64 = event.target?.result;
       previewImg.src = selectedImageBase64;
       imagePreview.classList.remove('hidden');
     };
@@ -134,7 +191,7 @@
   });
 
   // --- Image Modal ---
-  function openImageModal(src: string) {
+  function openImageModal(src) {
     modalImg.src = src;
     imgModal.classList.add('show');
   }
@@ -144,16 +201,17 @@
   // --- Message Sending ---
   chatForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const query = chatInput.value.trim();
-    const fileToSend = selectedFile; 
+    const query      = chatInput.value.trim();
+    const fileToSend = selectedFile;
+
     if (!query && !fileToSend) return;
+    if (_isLimitReached()) { _showLimitWarning(); return; }
 
     appendUserMessage(query, selectedImageBase64);
-
-    chatInput.value = '';
+    chatInput.value  = '';
     selectedImageBase64 = null;
-    selectedFile = null;
-    fileInput.value = '';
+    selectedFile        = null;
+    fileInput.value  = '';
     imagePreview.classList.add('hidden');
     scrollToBottom();
 
@@ -161,31 +219,44 @@
     scrollToBottom();
 
     const formData = new FormData();
-    formData.append('message', query || "Is this screenshot safe?");
-    formData.append('session_id', 'user_session_12345'); 
-    if (fileToSend) formData.append('image', fileToSend); 
+    formData.append('message',    query || 'Is this screenshot safe?');
+    formData.append('session_id', sessionId);
+    if (fileToSend) formData.append('image', fileToSend);
+
+    _bumpUsage();
 
     try {
-      const response = await fetch('/api/v1/chat', {
+      const response = await fetch(MAIN_API + '/api/v1/chat', {
         method: 'POST',
-        body: formData
+        body:   formData,
+        signal: AbortSignal.timeout(30000),
       });
 
-      if (!response.ok) throw new Error('API failed');
-      const data = await response.json();
-      
       typingIndicator.classList.add('hidden');
+
+      if (response.status === 429) { _showLimitWarning(); return; }
+      if (!response.ok) throw new Error(`Server error ${response.status}`);
+
+      const data = await response.json();
       handleApiResponse(data);
 
+      if (_isLimitReached()) _showLimitWarning();
+      else if (usageCount >= DAILY_LIMIT - 5) {
+        appendBotMessage(`⚠️ You have ${DAILY_LIMIT - usageCount} messages remaining today.`);
+      }
+
     } catch (err) {
-      // 1. SERVER UNREACHABLE: Show admin message
       typingIndicator.classList.add('hidden');
-      appendBotMessage("⚠️ Server is not reachable right now. Please check your connection and try again.");
+      if (err.name === 'TimeoutError' || err.name === 'AbortError') {
+        appendBotMessage('⏱️ Request timed out. Please try again.');
+      } else {
+        appendBotMessage('⚠️ Could not reach the server. Check your connection.');
+      }
     }
   });
 
   // --- API Response Handling ---
-  function handleApiResponse(data: any) {
+  function handleApiResponse(data) {
     if (!data) {
       appendBotMessage("Received an empty response from the server.");
       return;
@@ -240,7 +311,7 @@
   }
 
   // --- Helper Functions ---
-  function appendUserMessage(text: string, imageSrc: string | null) {
+  function appendUserMessage(text, imageSrc) {
     const msgDiv = document.createElement('div');
     msgDiv.className = 'ss-message user';
     let bubbleContent = '';
@@ -254,7 +325,7 @@
     scrollToBottom();
   }
 
-  function appendBotMessage(text: string) {
+  function appendBotMessage(text) {
     const msg = document.createElement('div');
     msg.className = 'ss-message assistant';
     msg.innerHTML = `<div class="ss-bubble"><div class="ss-text">${escapeHtml(text)}</div></div>`;
@@ -263,7 +334,7 @@
   }
 
   // Creates the Box with "Security Scan Complete" header AND the Scanner Result UI inside it
-  function appendScanResultBox(payload: any) {
+  function appendScanResultBox(payload) {
     const msgDiv = document.createElement('div');
     msgDiv.className = 'ss-message assistant';
     
@@ -437,10 +508,37 @@
   .ss-bubble { max-width: 85%; padding: 10px 14px; border-radius: 8px; font-size: 14px; line-height: 1.4; box-shadow: 0 1px 1px rgba(0,0,0,0.1); word-wrap: break-word; }
   .ss-message.user .ss-bubble { background: #D9FDD3; color: #111; border-bottom-right-radius: 2px; }
   .ss-message.assistant .ss-bubble { background: #ffffff; color: #333; border-bottom-left-radius: 2px; border: 1px solid #e0e0e0; }
-  .ss-message.system .ss-bubble { background: #FFF3CD; color: #856404; border: 1px solid #ffeeba; text-align: center; font-size: 13px; max-width: 90%; }
+  .ss-message.system .ss-bubble { background: #EFF6FF; color: #1e40af; border: 1px solid #bfdbfe; text-align: left; font-size: 13px; max-width: 95%; }
+
+  /* Quick-hint chips in welcome message */
+  .ss-quick-hints {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .ss-quick-hints span {
+    background: rgba(30, 64, 175, 0.08);
+    color: #1e40af;
+    border: 1px solid rgba(30, 64, 175, 0.2);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 11.5px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* Rate-limit warning bubble (amber) */
+  .ss-limit-bubble {
+    background: #FEF3C7 !important;
+    color: #92400E !important;
+    border-color: #FDE68A !important;
+    font-size: 13px;
+  }
 
   .ss-img-thumb { width: 100px; height: 100px; border-radius: 6px; overflow: hidden; cursor: pointer; margin-bottom: 6px; border: 1px solid rgba(0,0,0,0.1); }
   .ss-img-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
 
   /* ========================================= */
   /* SCAN BOX & SCANNER RESULT UI STYLES       */
